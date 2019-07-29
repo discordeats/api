@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const r = module.exports = require('rethinkdbdash')({ db: 'discordeats' });
-const paypal =require('paypal-rest-sdk');
+const paypal = require('paypal-rest-sdk');
 const config = require('./config.json');
 const bodyParser = require('body-parser');
 
