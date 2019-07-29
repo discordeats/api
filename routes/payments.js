@@ -62,6 +62,7 @@ router.get('/success', async (req, res) => {
     const payerid = req.query.PayerID;
     const paymentid = req.query.paymentId;
     const token = req.query.token;
+    if (!payerid || !paymentid || !token) return res.json({ error: true, type: 'Insufficient paypal information' });
     const possorders = await r.table('orders').filter({ token: token }).run();
     const order = possorders[0];
 
@@ -101,7 +102,9 @@ router.get('/success', async (req, res) => {
 });
 
 router.get('/cancel', async (req, res) => {
-    const possorders = await r.table('orders').filter({ token: req.query.token }).run();
+    const token = req.query.token;
+    if (!token) return res.json({ error: true, type: 'Insufficient paypal information' });
+    const possorders = await r.table('orders').filter({ token: token }).run();
     const order = possorders[0];
     client.channels.get(order.channel).send(`:x: **${order.requestor}** has cancelled the payment!`);
     res.send('Cancelled, proceed to Discord');
