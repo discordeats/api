@@ -1,0 +1,17 @@
+{
+  "name": "discordeatsapi",
+  "version": "1.0.0",
+  "description": "The API for Discord Eats",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Facto",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "express": "^4.17.1",
+    "paypal-rest-sdk": "^1.8.1",
+    "rethinkdbdash": "^2.3.31"
+  }
+}

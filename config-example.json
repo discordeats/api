@@ -1,0 +1,16 @@
+{
+    "key":"",
+    "paypal": {
+        "return_url":"",
+        "cancel_url":"",
+        "mode":"",
+        "client_id":"",
+        "client_secret":""
+    },
+    "server": {
+        "port":""
+    },
+    "discord": {
+        "token":""
+    }
+}
