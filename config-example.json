@@ -12,5 +12,11 @@
     },
     "discord": {
         "token":""
+    },
+    "db": {
+        "host":"",
+        "port":"",
+        "user":"",
+        "password":""
     }
 }

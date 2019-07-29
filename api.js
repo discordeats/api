@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const r = module.exports = require('rethinkdbdash')({ db: 'discordeats' });
+const r = module.exports = require('rethinkdbdash')({ db: 'discordeats', servers: [{ host: client.config.db.host, port: client.config.db.port, user: client.config.db.user, password: client.config.db.password }] });
 const paypal = require('paypal-rest-sdk');
 const config = require('./config.json');
 const bodyParser = require('body-parser');
