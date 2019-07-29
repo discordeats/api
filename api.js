@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
+const config = require('./config.json');
 const r = module.exports = require('rethinkdbdash')({ db: 'discordeats', servers: [{ host: config.db.host, port: config.db.port, user: config.db.user, password: config.db.password }] });
 const paypal = require('paypal-rest-sdk');
-const config = require('./config.json');
 const bodyParser = require('body-parser');
 
 paypal.configure({ 'mode': config.paypal.mode, 'client_id': config.paypal.client_id, 'client_secret': config.paypal.client_secret })
