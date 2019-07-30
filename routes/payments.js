@@ -45,7 +45,7 @@ router.post('/create', async (req, res) => {
                 const id = util.createCode();
                 const href = link.href;
                 const token = util.getTokenFromLink(href);
-                await r.table('orders').insert({ id: id, token: token, link: link.href, cost: cost, requestor: requestor, status: 'PENDING', channel: channel }).run();
+                await r.table('orders').insert({ id: id, token: token, link: link.href, cost: cost, requestor: { id: requestor.id, tag: requestor.tag }, status: 'PENDING', channel: channel }).run();
                 res.json({ error: false, id: id });
             }
         });
@@ -98,7 +98,13 @@ router.get('/success', async (req, res) => {
         .addField('Email', email)
         .addField('Shipping Address', `${street}, ${city}, ${state}, ${postal}`)
         .setColor('GREEN');
-        client.channels.get(order.channel).send(embed);
+        const channel = client.channels.get(order.channel);
+        const member = (await channel.guild.fetchMembers()).members.get(order.requestor.id);
+        const customer = channel.guild.roles.find(r => r.name === 'Customer');
+        if (member && !member.roles.has(customer.id)) {
+            member.addRole(customer);
+        }
+        channel.send(embed);
         res.send('Paid, proceed to Discord');
     });
 });
