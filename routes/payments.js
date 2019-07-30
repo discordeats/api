@@ -92,7 +92,7 @@ router.get('/success', async (req, res) => {
         const state = payment.payer.payer_info.shipping_address.state;
         const postal = payment.payer.payer_info.shipping_address.postal_code;
         const embed = new RichEmbed()
-        .setDescription(`**${order.requestor}** has paid the **$${order.cost}**!`)
+        .setDescription(`**${order.requestor.tag}** has paid the **$${order.cost}**!`)
         .addField('First Name', firstname)
         .addField('Last Name', lastname)
         .addField('Email', email)
