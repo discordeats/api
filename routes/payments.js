@@ -55,6 +55,7 @@ router.post('/create', async (req, res) => {
 router.get('/cont/:id', async (req, res) => {
     const order = await r.table('orders').get(req.params.id).run();
     if (!order) return res.json({ error: true, type: 'No order could be found under that ID!' });
+    if (order.status == 'VERIFIED' || order.status == 'CANCELLED') return res.json({ error: true, type: 'Payment already dealt with' });
     res.redirect(order.link);
 });
 
@@ -65,6 +66,7 @@ router.get('/success', async (req, res) => {
     if (!payerid || !paymentid || !token) return res.json({ error: true, type: 'Insufficient paypal information' });
     const possorders = await r.table('orders').filter({ token: token }).run();
     const order = possorders[0];
+    if (order.status == 'VERIFIED' || order.status == 'CANCELLED') return res.json({ error: true, type: 'Payment already dealt with' });
 
     const execute_payment_json = {
         "payer_id": payerid,
@@ -106,6 +108,7 @@ router.get('/cancel', async (req, res) => {
     if (!token) return res.json({ error: true, type: 'Insufficient paypal information' });
     const possorders = await r.table('orders').filter({ token: token }).run();
     const order = possorders[0];
+    await r.table('orders').get(order.id).update({ status: 'CANCELLED' }).run();
     client.channels.get(order.channel).send(`:x: **${order.requestor}** has cancelled the payment!`);
     res.send('Cancelled, proceed to Discord');
 });
