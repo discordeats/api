@@ -119,6 +119,7 @@ router.get('/cancel', async (req, res) => {
     const embed = new RichEmbed()
     .setDescription(`**${order.requestor.tag}** has cancelled the order!`)
     .setFooter(`Please rate your experience with !rate ${order.id}`)
+    .setColor('RED');
     client.channels.get(order.channel).send(embed);
     res.send('Cancelled, proceed to Discord');
 });
