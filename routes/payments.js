@@ -115,7 +115,7 @@ router.get('/cancel', async (req, res) => {
     const possorders = await r.table('orders').filter({ token: token }).run();
     const order = possorders[0];
     await r.table('orders').get(order.id).update({ status: 'CANCELLED' }).run();
-    client.channels.get(order.channel).send(`:x: **${order.requestor}** has cancelled the payment!`);
+    client.channels.get(order.channel).send(`:x: **${order.requestor.tag}** has cancelled the payment!`);
     res.send('Cancelled, proceed to Discord');
 });
 
