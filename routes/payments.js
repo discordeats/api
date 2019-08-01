@@ -45,7 +45,7 @@ router.post('/create', async (req, res) => {
                 const id = util.createCode();
                 const href = link.href;
                 const token = util.getTokenFromLink(href);
-                await r.table('orders').insert({ id: id, token: token, link: link.href, cost: cost, requestor: { id: requestor.id, tag: requestor.tag }, status: 'PENDING', channel: channel }).run();
+                await r.table('orders').insert({ id: id, token: token, link: link.href, cost: cost, requestor: { id: requestor.id, tag: requestor.tag }, status: 'PENDING', channel: channel, review: false }).run();
                 res.json({ error: false, id: id });
             }
         });
@@ -97,6 +97,7 @@ router.get('/success', async (req, res) => {
         .addField('Last Name', lastname)
         .addField('Email', email)
         .addField('Shipping Address', `${street}, ${city}, ${state}, ${postal}`)
+        .setFooter(`Please rate your experience with !rate ${order.id}`)
         .setColor('GREEN');
         const channel = client.channels.get(order.channel);
         const member = (await channel.guild.fetchMembers()).members.get(order.requestor.id);
@@ -115,7 +116,10 @@ router.get('/cancel', async (req, res) => {
     const possorders = await r.table('orders').filter({ token: token }).run();
     const order = possorders[0];
     await r.table('orders').get(order.id).update({ status: 'CANCELLED' }).run();
-    client.channels.get(order.channel).send(`:x: **${order.requestor.tag}** has cancelled the payment!`);
+    const embed = new RichEmbed()
+    .setDescription(`**${order.requestor.tag}** has cancelled the order!`)
+    .setFooter(`Please rate your experience with !rate ${order.id}`)
+    client.channels.get(order.channel).send(embed);
     res.send('Cancelled, proceed to Discord');
 });
 
